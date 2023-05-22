@@ -1,6 +1,6 @@
+import 'package:anycloud_pre_training/di/github_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../di/github_api.dart';
 
 class SearchBar extends StatelessWidget {
   @override

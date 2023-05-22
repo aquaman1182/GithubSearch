@@ -1,21 +1,50 @@
+import 'package:anycloud_pre_training/di/github_api.dart';
+import 'package:anycloud_pre_training/view/repository_list.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (ctx) => GitHubApi(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '研修前課題',
+      title: 'GitHub Search',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SearchGitHubPage(),
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('GitHub Search'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            onPressed: () {
+              // Navigate to user details page
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          SearchBar(),
+          Expanded(child: RepositoryList()),
+        ],
+      ),
     );
   }
 }
