@@ -13,8 +13,17 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final GitHubApi gitHubApi = context.read<GitHubApi>();
     return Scaffold(
+      //- ヘッダーを作成して、ログイン中のユーザーのアイコンを表示する - Github API（ `/[user](https://docs.github.com/ja/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user)` ）を利用する。ヘッダーはすべての画面で表示すること
       appBar: AppBar(
         title: Text(title),
+        actions: [
+          IconButton(
+            onPressed: () {
+              gitHubApi.fetchUserDetails('');
+            }, 
+            icon: Icon(Icons.account_circle),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -46,8 +55,12 @@ class MyHomePage extends StatelessWidget {
             Expanded(
               child: Consumer<GitHubApi>(
                 builder: (context, gitHubApi, _) => ListView.builder(
+                  //検索結果のアイテムをタップしたら、該当リポジトリの詳細（リポジトリ名、オーナーアイコン、プロジェクト言語、Star数、Watcher数、Fork数、Issue数）を表示する
                   itemCount: gitHubApi.repositories.length,
                   itemBuilder: (ctx, i) => ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(gitHubApi.repositories[i]['owner']['avatar_url']),
+                    ),
                     title: Text(gitHubApi.repositories[i]['name']),
                   ),
                 ),

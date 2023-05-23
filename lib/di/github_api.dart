@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -34,13 +33,13 @@ class GitHubApi with ChangeNotifier {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         _userDetails = json.decode(response.body) as Map<String, dynamic>;
-        print('Fetched user details: $_userDetails'); // Debug output
+        print('Fetched user details: $_userDetails'); 
         notifyListeners();
       } else {
         throw HttpException('Failed to load user details');
       }
     } catch (error) {
-      print('Error fetching user details: $error'); // Debug output
+      print('Error fetching user details: $error'); 
       throw error;
     }
   }
