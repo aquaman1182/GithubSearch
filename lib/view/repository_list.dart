@@ -56,12 +56,15 @@ class MyHomePage extends StatelessWidget {
               child: Consumer<GitHubApi>(
                 builder: (context, gitHubApi, _) => ListView.builder(
                   //検索結果のアイテムをタップしたら、該当リポジトリの詳細（リポジトリ名、オーナーアイコン、プロジェクト言語、Star数、Watcher数、Fork数、Issue数）を表示する
+                  //ページネーションを実装する
                   itemCount: gitHubApi.repositories.length,
                   itemBuilder: (ctx, i) => ListTile(
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage(gitHubApi.repositories[i]['owner']['avatar_url']),
                     ),
                     title: Text(gitHubApi.repositories[i]['name']),
+                    subtitle: Text(gitHubApi.repositories[i]['language']),
+                    trailing: Text(gitHubApi.repositories[i]['stargazers_count'].toString()),
                   ),
                 ),
               ),

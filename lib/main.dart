@@ -12,7 +12,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'GitHub Search',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.lightGreen,
+          //ダークモードに対応する　動的に変化するように変更する
+          brightness: Brightness.dark,
         ),
         home: MyHomePage(title: 'GitHub Search', key: Key('home-page'),),
       ),
