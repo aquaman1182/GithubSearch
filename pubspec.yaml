@@ -9,13 +9,15 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  go_router: ^7.1.1
+  http: ^0.13.6
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  http: ^0.13.6
-  provider: ^6.0.5
+
 
 flutter:
   uses-material-design: true

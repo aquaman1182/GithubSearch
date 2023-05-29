@@ -43,4 +43,8 @@ class GitHubApi with ChangeNotifier {
       throw error;
     }
   }
+
+  getRepositoryByName(String repositoryName) {
+    
+  }
 }

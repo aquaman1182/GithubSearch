@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../di/github_api.dart';
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({required Key key, required this.title}) : super(key: key);
 
-  final String title;
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -15,7 +14,7 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       //- ヘッダーを作成して、ログイン中のユーザーのアイコンを表示する - Github API（ `/[user](https://docs.github.com/ja/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user)` ）を利用する。ヘッダーはすべての画面で表示すること
       appBar: AppBar(
-        title: Text(title),
+        title: Text("GitHub Search"),
         actions: [
           IconButton(
             onPressed: () {
@@ -65,6 +64,9 @@ class MyHomePage extends StatelessWidget {
                     title: Text(gitHubApi.repositories[i]['name']),
                     subtitle: Text(gitHubApi.repositories[i]['language']),
                     trailing: Text(gitHubApi.repositories[i]['stargazers_count'].toString()),
+                    onTap: () {
+                      context.go('/repository/${gitHubApi.repositories[i]['name']}');
+                    },
                   ),
                 ),
               ),
