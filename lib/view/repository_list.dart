@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../di/github_api.dart';
 
 class MyHomePage extends StatelessWidget {
-
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -17,9 +16,10 @@ class MyHomePage extends StatelessWidget {
         title: Text("GitHub Search"),
         actions: [
           IconButton(
+            //自分のアカウントへ遷移する
             onPressed: () {
               gitHubApi.fetchUserDetails('');
-            }, 
+            },
             icon: Icon(Icons.account_circle),
           ),
         ],
@@ -47,11 +47,13 @@ class MyHomePage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
+                //ボタンを押すと、入力した文字列を検索して、検索結果を表示する
                 gitHubApi.fetchRepositories(textController.text);
-              }, 
+              },
               child: const Text('Search'),
             ),
             Expanded(
+              //検索結果を表示する
               child: Consumer<GitHubApi>(
                 builder: (context, gitHubApi, _) => ListView.builder(
                   //検索結果のアイテムをタップしたら、該当リポジトリの詳細（リポジトリ名、オーナーアイコン、プロジェクト言語、Star数、Watcher数、Fork数、Issue数）を表示する
@@ -59,13 +61,23 @@ class MyHomePage extends StatelessWidget {
                   itemCount: gitHubApi.repositories.length,
                   itemBuilder: (ctx, i) => ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: NetworkImage(gitHubApi.repositories[i]['owner']['avatar_url']),
+                      backgroundImage: NetworkImage(
+                          gitHubApi.repositories[i]['owner']['avatar_url']),
                     ),
-                    title: Text(gitHubApi.repositories[i]['name']),
-                    subtitle: Text(gitHubApi.repositories[i]['language']),
-                    trailing: Text(gitHubApi.repositories[i]['stargazers_count'].toString()),
+                    title: Text(gitHubApi.repositories[i]['name'].toString()),
+                    subtitle:
+                        Text(gitHubApi.repositories[i]['language'].toString()),
+                    trailing: Text(
+                      "⭐️" +
+                          gitHubApi.repositories[i]['stargazers_count']
+                              .toString(),
+                    ),
                     onTap: () {
-                      context.go('/repository/${gitHubApi.repositories[i]['name']}');
+                      //詳細画面へ遷移する
+                      final repoName =
+                          gitHubApi.repositories[i]['name'].toString();
+                      context
+                          .go('/repository/${Uri.encodeComponent(repoName)}');
                     },
                   ),
                 ),

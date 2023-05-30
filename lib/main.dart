@@ -3,15 +3,16 @@ import 'package:anycloud_pre_training/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 void main() async {
   final goRouter = createGoRouter(); // 追加: goRouterを作成
 
   runApp(
     ChangeNotifierProvider(
-      create: (context) => GitHubApi(), 
-      child: MyApp(goRouter: goRouter)
+      create: (context) => GitHubApi(),
+      child: MyApp(goRouter: goRouter),
     ),
-  ); 
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -14,9 +14,11 @@ class GitHubApi with ChangeNotifier {
   Map get userDetails {
     return {..._userDetails};
   }
-  
+
   Future<void> fetchRepositories(String query) async {
-    final response = await http.get(Uri.parse('https://api.github.com/search/repositories?q=$query'));
+    final response = await http.get(
+      Uri.parse('https://api.github.com/search/repositories?q=$query'),
+    );
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -33,18 +35,19 @@ class GitHubApi with ChangeNotifier {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         _userDetails = json.decode(response.body) as Map<String, dynamic>;
-        print('Fetched user details: $_userDetails'); 
+        print('Fetched user details: $_userDetails');
         notifyListeners();
       } else {
         throw HttpException('Failed to load user details');
       }
     } catch (error) {
-      print('Error fetching user details: $error'); 
+      print('Error fetching user details: $error');
       throw error;
     }
   }
 
   getRepositoryByName(String repositoryName) {
-    
+    return _repositories.firstWhere((repo) => repo['name'] == repositoryName,
+        orElse: () => null);
   }
 }
