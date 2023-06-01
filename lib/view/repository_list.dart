@@ -11,12 +11,10 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final GitHubApi gitHubApi = context.read<GitHubApi>();
     return Scaffold(
-      //- ヘッダーを作成して、ログイン中のユーザーのアイコンを表示する - Github API（ `/[user](https://docs.github.com/ja/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user)` ）を利用する。ヘッダーはすべての画面で表示すること
       appBar: AppBar(
         title: Text("GitHub Search"),
         actions: [
           IconButton(
-            //自分のアカウントへ遷移する
             onPressed: () {
               gitHubApi.fetchUserDetails('');
             },
@@ -47,17 +45,14 @@ class MyHomePage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                //ボタンを押すと、入力した文字列を検索して、検索結果を表示する
                 gitHubApi.fetchRepositories(textController.text);
               },
               child: const Text('Search'),
             ),
             Expanded(
-              //検索結果を表示する
               child: Consumer<GitHubApi>(
                 builder: (context, gitHubApi, _) => ListView.builder(
-                  //検索結果のアイテムをタップしたら、該当リポジトリの詳細（リポジトリ名、オーナーアイコン、プロジェクト言語、Star数、Watcher数、Fork数、Issue数）を表示する
-                  //ページネーションを実装する
+                  controller: gitHubApi.scrollController, // Add this line
                   itemCount: gitHubApi.repositories.length,
                   itemBuilder: (ctx, i) => ListTile(
                     leading: CircleAvatar(
@@ -73,11 +68,8 @@ class MyHomePage extends StatelessWidget {
                               .toString(),
                     ),
                     onTap: () {
-                      //詳細画面へ遷移する
-                      final repoName =
-                          gitHubApi.repositories[i]['name'].toString();
-                      context
-                          .go('/repository/${Uri.encodeComponent(repoName)}');
+                      final repoName = gitHubApi.repositories[i]['name'].toString();
+                      context.go('/repository/${Uri.encodeComponent(repoName)}');
                     },
                   ),
                 ),

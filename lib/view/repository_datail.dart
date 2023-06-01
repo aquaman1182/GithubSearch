@@ -1,9 +1,11 @@
 import 'package:anycloud_pre_training/di/github_api.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class RepositoryDetailPage extends StatelessWidget {
   final String repoName;
+
   RepositoryDetailPage({required this.repoName});
 
   @override
@@ -15,23 +17,35 @@ class RepositoryDetailPage extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: Text(repository['name'].toString()),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              context.go("/");
+            },
+          )
         ),
-        body: Column(
-          children: <Widget>[
-            Text('Language: ${repository['language'].toString()}'),
-            Text('Stars: ${repository['stargazers_count'].toString()}'),
-            // Add more fields as needed
-          ],
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                Text('🎌' + 'Language: ${repository['language'].toString()}'),
+                Text('⭐️' + 'Stars: ${repository['stargazers_count'].toString()}'),
+                Text('👀' + 'Watchers: ${repository['subscribers_count'].toString()}'),
+                Text('©️' + 'Forks: ${repository['forks_count'].toString()}'),
+                Text('🤡' + 'Issues: ${repository['open_issues_count'].toString()}'),
+              ],
+            ),
+          ),
         ),
       );
     } else {
-      // Handle the case where repository is null
       return Scaffold(
         appBar: AppBar(
-          title: Text('エラー'),
+          title: Text('Error'),
         ),
         body: Center(
-          child: Text('リポジトリが見つかりませんでした'),
+          child: Text('Repository not found'),
         ),
       );
     }

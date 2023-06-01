@@ -10,14 +10,19 @@ GoRouter createGoRouter() {
         path: '/',
         pageBuilder: (context, state) => MaterialPage(
           key: state.pageKey,
-          child: MyHomePage(),
+          child: MyHomePage()
         ),
       ),
       GoRoute(
         path: '/repository/:repositoryName',
-        builder: (context, state) => RepositoryDetailPage(
-          repoName: state.params['repositoryName']!,
-        ),
+        pageBuilder: (context, state) {
+          final repositoryName = state.params['repositoryName']!;
+
+          return MaterialPage(
+            key: state.pageKey,
+            child: RepositoryDetailPage(repoName: repositoryName)
+          );
+        },
       ),
     ],
   );

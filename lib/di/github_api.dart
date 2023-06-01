@@ -1,11 +1,27 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class GitHubApi with ChangeNotifier {
   List<dynamic> _repositories = [];
   Map _userDetails = {};
+
+  int _page = 1;
+  ScrollController _scrollController = ScrollController();
+
+  GitHubApi() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        if (_scrollController.position.pixels != 0) {
+          // When we're at the bottom of the ListView, fetch more data.
+          fetchRepositories('');
+        }
+      }
+    });
+  }
+
+  ScrollController get scrollController => _scrollController; 
 
   List<dynamic> get repositories {
     return [..._repositories];
@@ -15,19 +31,21 @@ class GitHubApi with ChangeNotifier {
     return {..._userDetails};
   }
 
-  Future<void> fetchRepositories(String query) async {
-    final response = await http.get(
-      Uri.parse('https://api.github.com/search/repositories?q=$query'),
-    );
+Future<void> fetchRepositories(String query) async {
+  final response = await http.get(
+    Uri.parse('https://api.github.com/search/repositories?q=$query&page=$_page'),
+  );
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      _repositories = data['items'];
-      notifyListeners();
-    } else {
-      throw Exception('Failed to load repositories');
-    }
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    _repositories.addAll(data['items']); // append new data to existing list
+    _page++; // increment page number
+    notifyListeners();
+  } else {
+    throw Exception('Failed to load repositories');
   }
+}
+
 
   Future<void> fetchUserDetails(String username) async {
     try {
