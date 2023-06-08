@@ -13,12 +13,15 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("GitHub Search"),
-        actions: [
+        actions: <Widget>[
           IconButton(
-            onPressed: () {
-              gitHubApi.fetchUserDetails('');
+            icon: gitHubApi.userAvatarUrl != null
+                ? Image.network(gitHubApi.userAvatarUrl!)
+                : Icon(Icons.account_circle),
+            onPressed: () async {
+              await gitHubApi.fetchUserDetails('aquaman1182');
+              context.go('/user/${Uri.encodeComponent('aquaman1182')}');
             },
-            icon: Icon(Icons.account_circle),
           ),
         ],
       ),

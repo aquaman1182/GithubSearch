@@ -10,7 +10,7 @@ class RepositoryDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gitHubApi = context.read<GitHubApi>();
+    final GitHubApi gitHubApi = context.read();
     final repository = gitHubApi.getRepositoryByName(repoName);
 
     if (repository != null) {
