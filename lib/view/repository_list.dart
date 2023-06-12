@@ -32,9 +32,15 @@ class MyHomePage extends StatelessWidget {
             TextFormField(
               controller: textController,
               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                fillColor: Colors.green[100],
                 hintText: 'ここに入力してください',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(32),
+                  borderSide: BorderSide.none,
+                ),
                 filled: true,
+                isDense: true
               ),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.singleLineFormatter,
@@ -45,39 +51,44 @@ class MyHomePage extends StatelessWidget {
                 }
                 return null;
               },
-            ),
-            ElevatedButton(
-              onPressed: () {
+              onFieldSubmitted: (_) {
+                gitHubApi.resetRepositoriesAndPageNumber();
                 gitHubApi.fetchRepositories(textController.text);
               },
-              child: const Text('Search'),
             ),
             Expanded(
               child: Consumer<GitHubApi>(
                 builder: (context, gitHubApi, _) => ListView.builder(
-                  controller: gitHubApi.scrollController, // Add this line
+                  controller: gitHubApi.scrollController,
                   itemCount: gitHubApi.repositories.length,
-                  itemBuilder: (ctx, i) => ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          gitHubApi.repositories[i]['owner']['avatar_url']),
-                    ),
-                    title: Text(gitHubApi.repositories[i]['name'].toString()),
-                    subtitle:
-                        Text(gitHubApi.repositories[i]['language'].toString()),
-                    trailing: Text(
-                      "⭐️" +
-                          gitHubApi.repositories[i]['stargazers_count']
-                              .toString(),
-                    ),
-                    onTap: () {
-                      final repoName = gitHubApi.repositories[i]['name'].toString();
-                      context.go('/repository/${Uri.encodeComponent(repoName)}');
-                    },
-                  ),
+                  itemBuilder: (ctx, i) {
+                    if (i < gitHubApi.repositories.length) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              gitHubApi.repositories[i]['owner']['avatar_url']),
+                        ),
+                        title: Text(gitHubApi.repositories[i]['name'].toString()),
+                        subtitle:
+                            Text(gitHubApi.repositories[i]['language'].toString()),
+                        trailing: Text(
+                          "⭐️" +
+                              gitHubApi.repositories[i]['stargazers_count']
+                                  .toString(),
+                        ),
+                        onTap: () {
+                          final repoName = gitHubApi.repositories[i]['name'].toString();
+                          context.go('/repository/${Uri.encodeComponent(repoName)}');
+                        },
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
                 ),
               ),
             ),
+
           ],
         ),
       ),

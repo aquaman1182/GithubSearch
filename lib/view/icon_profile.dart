@@ -1,5 +1,6 @@
 import 'package:anycloud_pre_training/di/github_api.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class UserDetailsScreen extends StatelessWidget {
@@ -22,18 +23,31 @@ class UserDetailsScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text(gitHubApi.userDetails['name'] ?? 'N/A'),
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  context.go("/");
+                },
+              ),
             ),
             body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  if (gitHubApi.userDetails['avatar_url'] != null)
-                    Image.network(gitHubApi.userDetails['avatar_url']),
-                  Text('Name: ' + (gitHubApi.userDetails['name'] ?? 'N/A')),
-                  Text('Following: ' + (gitHubApi.userDetails['following']?.toString() ?? 'N/A')),
-                  Text('Followers: ' + (gitHubApi.userDetails['followers']?.toString() ?? 'N/A')),
-                  Text('Bio: ' + (gitHubApi.userDetails['bio'] ?? 'N/A')),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    if (gitHubApi.userDetails['avatar_url'] != null)
+                      CircleAvatar(
+                        radius: 50, // ここでアバターのサイズを調整します。
+                        backgroundImage: NetworkImage(gitHubApi.userDetails['avatar_url']),
+                      ),
+                    SizedBox(height: 10), // アバターと情報の間にスペースを追加します。
+                    Text('Name: ' + (gitHubApi.userDetails['name'] ?? 'N/A')),
+                    Text('Following: ' + (gitHubApi.userDetails['following']?.toString() ?? 'N/A')),
+                    Text('Followers: ' + (gitHubApi.userDetails['followers']?.toString() ?? 'N/A')),
+                    Text('Bio: ' + (gitHubApi.userDetails['bio'] ?? 'N/A')),
+                  ],
+                ),
               ),
             ),
           );
