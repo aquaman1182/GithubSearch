@@ -21,19 +21,30 @@ class RepositoryDetailPage extends StatelessWidget {
           onPressed: () {
             context.go("/");
           },
-        )
+        ),
       ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Text('🎌' + 'Language: ${repository['language'].toString()}'),
-              Text('⭐️' + 'Stars: ${repository['stargazers_count'].toString()}'),
-              Text('👀' + 'Watchers: ${repository['subscribers_count'].toString()}'),
-              Text('©️' + 'Forks: ${repository['forks_count'].toString()}'),
-              Text('🤡' + 'Issues: ${repository['open_issues_count'].toString()}'),
-            ],
+          child: Card(
+            color: Colors.green[100],
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min, 
+                children: <Widget>[
+                  Text('🎌' + 'Language: ${repository['language'].toString()}'),
+                  SizedBox(height: 10), // 間隔を追加
+                  Text('⭐️' + 'Stars: ${repository['stargazers_count'].toString()}'),
+                  SizedBox(height: 10), // 間隔を追加
+                  Text('👀' + 'Watchers: ${repository['watchers_count'].toString()}'),
+                  SizedBox(height: 10), // 間隔を追加
+                  Text('©️' + 'Forks: ${repository['forks_count'].toString()}'),
+                  SizedBox(height: 10), // 間隔を追加
+                  Text('🤡' + 'Issues: ${repository['open_issues_count'].toString()}'),
+                ],
+              ),
+            ),
           ),
         ),
       ),

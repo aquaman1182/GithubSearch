@@ -33,20 +33,26 @@ class UserDetailsScreen extends StatelessWidget {
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    if (gitHubApi.userDetails['avatar_url'] != null)
-                      CircleAvatar(
-                        radius: 50, // ここでアバターのサイズを調整します。
-                        backgroundImage: NetworkImage(gitHubApi.userDetails['avatar_url']),
-                      ),
-                    SizedBox(height: 10), // アバターと情報の間にスペースを追加します。
-                    Text('Name: ' + (gitHubApi.userDetails['name'] ?? 'N/A')),
-                    Text('Following: ' + (gitHubApi.userDetails['following']?.toString() ?? 'N/A')),
-                    Text('Followers: ' + (gitHubApi.userDetails['followers']?.toString() ?? 'N/A')),
-                    Text('Bio: ' + (gitHubApi.userDetails['bio'] ?? 'N/A')),
-                  ],
+                child: Card(
+                  color: Colors.green[100],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min, 
+                      children: <Widget>[
+                        if (gitHubApi.userDetails['avatar_url'] != null)
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: NetworkImage(gitHubApi.userDetails['avatar_url']),
+                          ),
+                        SizedBox(height: 10), // 10pxの空白
+                        Text('Name: ' + (gitHubApi.userDetails['name'] ?? 'N/A')),
+                        Text('Following: ' + (gitHubApi.userDetails['following']?.toString() ?? 'N/A')),
+                        Text('Followers: ' + (gitHubApi.userDetails['followers']?.toString() ?? 'N/A')),
+                        Text('Bio: ' + (gitHubApi.userDetails['bio'] ?? 'N/A')),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
