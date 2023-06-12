@@ -18,6 +18,13 @@ class GitHubApi with ChangeNotifier {
     return _userAvatarUrl;
   }
 
+  //サーキュラーインジケーターの表示・非表示を管理するフラグ
+  bool _isLoading = false;
+
+  bool get isLoading {
+    return _isLoading;
+  }
+
   Future<void> fetchUserDetails(String username) async {
     try {
       final url = Uri.parse('https://api.github.com/users/$username');
@@ -39,12 +46,10 @@ class GitHubApi with ChangeNotifier {
     }
   }
 
-  ScrollController _scrollController = ScrollController();
-
   GitHubApi() {
-    _scrollController.addListener(() {
-      if (_scrollController.position.atEdge) {
-        if (_scrollController.position.pixels != 0) {
+    scrollController.addListener(() {  // ここを修正
+      if (scrollController.position.atEdge) {  // ここを修正
+        if (scrollController.position.pixels != 0) {  // ここを修正
           fetchRepositories(lastQuery);
         }
       }
@@ -66,9 +71,14 @@ class GitHubApi with ChangeNotifier {
 
 
 int _currentPage = 1;
-int _perPage = 100;  // You can set this value to anything up to 100.
+int _perPage = 30;  // You can set this value to anything up to 100.
 
 Future<void> fetchRepositories(String query) async {
+  print('fetchRepositories called with query: $query');
+  lastQuery = query;
+
+  _isLoading = true;
+  notifyListeners();
   print('fetchRepositories called with query: $query');
   lastQuery = query;
 
@@ -85,11 +95,13 @@ Future<void> fetchRepositories(String query) async {
     var list = jsonDecode(response.body)['items'] as List<dynamic>;
     _repositories.addAll(list.map((e) => e as Map<String, dynamic>));
     notifyListeners();
-    _currentPage++;  // increment the page number for the next fetch
   } else {
     print('リポジトリの取得に失敗しました、ステータスコード: ${response.statusCode}');
     throw Exception('リポジトリの取得に失敗しました、ステータスコード: ${response.statusCode}');
   }
+  _isLoading = false;
+  notifyListeners();
+  _currentPage++;
 }
 
 Map<String, dynamic> getRepositoryByName(String repositoryName) {

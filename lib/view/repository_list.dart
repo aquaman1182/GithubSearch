@@ -34,7 +34,7 @@ class MyHomePage extends StatelessWidget {
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
                 fillColor: Colors.green[100],
-                hintText: 'ここに入力してください',
+                hintText: '検索',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(32),
                   borderSide: BorderSide.none,
@@ -60,7 +60,7 @@ class MyHomePage extends StatelessWidget {
               child: Consumer<GitHubApi>(
                 builder: (context, gitHubApi, _) => ListView.builder(
                   controller: gitHubApi.scrollController,
-                  itemCount: gitHubApi.repositories.length,
+                  itemCount: gitHubApi.repositories.length + (gitHubApi.isLoading ? 1 : 0),
                   itemBuilder: (ctx, i) {
                     if (i < gitHubApi.repositories.length) {
                       return ListTile(
@@ -82,7 +82,10 @@ class MyHomePage extends StatelessWidget {
                         },
                       );
                     } else {
-                      return Center(child: CircularProgressIndicator());
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
                     }
                   },
                 ),

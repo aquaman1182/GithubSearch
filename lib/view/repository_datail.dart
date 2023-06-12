@@ -33,6 +33,11 @@ class RepositoryDetailPage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min, 
                 children: <Widget>[
+                  if (gitHubApi.userDetails['avatar_url'] != null)
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(gitHubApi.userDetails['avatar_url']),
+                  ),
                   Text('🎌' + 'Language: ${repository['language'].toString()}'),
                   SizedBox(height: 10), // 間隔を追加
                   Text('⭐️' + 'Stars: ${repository['stargazers_count'].toString()}'),
