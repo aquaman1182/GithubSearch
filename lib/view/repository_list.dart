@@ -1,3 +1,4 @@
+import 'package:anycloud_pre_training/view/components/icon_button_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -9,20 +10,12 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GitHubApi gitHubApi = context.read<GitHubApi>();
+    final GitHubApi gitHubApi = context.read();
     return Scaffold(
       appBar: AppBar(
         title: Text("GitHub Search"),
         actions: <Widget>[
-          IconButton(
-            icon: gitHubApi.userAvatarUrl != null
-                ? Image.network(gitHubApi.userAvatarUrl!)
-                : Icon(Icons.account_circle),
-            onPressed: () async {
-              await gitHubApi.fetchUserDetails('aquaman1182');
-              context.go('/user/${Uri.encodeComponent('aquaman1182')}');
-            },
-          ),
+          UserProfileIconButton(),
         ],
       ),
       body: Padding(
@@ -33,7 +26,7 @@ class MyHomePage extends StatelessWidget {
               controller: textController,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                fillColor: Colors.green[100],
+                fillColor: Colors.grey[300],
                 hintText: '検索',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(32),
@@ -63,23 +56,32 @@ class MyHomePage extends StatelessWidget {
                   itemCount: gitHubApi.repositories.length + (gitHubApi.isLoading ? 1 : 0),
                   itemBuilder: (ctx, i) {
                     if (i < gitHubApi.repositories.length) {
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              gitHubApi.repositories[i]['owner']['avatar_url']),
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Card(
+                          child: ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            tileColor: Colors.greenAccent[100],
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  gitHubApi.repositories[i]['owner']['avatar_url']),
+                            ),
+                            title: Text(gitHubApi.repositories[i]['name'].toString()),
+                            subtitle:
+                                Text(gitHubApi.repositories[i]['language'].toString()),
+                            trailing: Text(
+                              "⭐️" +
+                                  gitHubApi.repositories[i]['stargazers_count']
+                                      .toString(),
+                            ),
+                            onTap: () {
+                              final repoName = gitHubApi.repositories[i]['name'].toString();
+                              context.go('/repository/${Uri.encodeComponent(repoName)}');
+                            },
+                          ),
                         ),
-                        title: Text(gitHubApi.repositories[i]['name'].toString()),
-                        subtitle:
-                            Text(gitHubApi.repositories[i]['language'].toString()),
-                        trailing: Text(
-                          "⭐️" +
-                              gitHubApi.repositories[i]['stargazers_count']
-                                  .toString(),
-                        ),
-                        onTap: () {
-                          final repoName = gitHubApi.repositories[i]['name'].toString();
-                          context.go('/repository/${Uri.encodeComponent(repoName)}');
-                        },
                       );
                     } else {
                       return Padding(

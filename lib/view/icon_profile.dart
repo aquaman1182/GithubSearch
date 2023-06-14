@@ -18,7 +18,7 @@ class UserDetailsScreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Text('エラー: ${snapshot.error}');
         } else {
           return Scaffold(
             appBar: AppBar(
@@ -45,7 +45,7 @@ class UserDetailsScreen extends StatelessWidget {
                             radius: 50,
                             backgroundImage: NetworkImage(gitHubApi.userDetails['avatar_url']),
                           ),
-                        SizedBox(height: 10), // 10pxの空白
+                        SizedBox(height: 10),
                         Text('Name: ' + (gitHubApi.userDetails['name'] ?? 'N/A')),
                         Text('Following: ' + (gitHubApi.userDetails['following']?.toString() ?? 'N/A')),
                         Text('Followers: ' + (gitHubApi.userDetails['followers']?.toString() ?? 'N/A')),

@@ -18,7 +18,6 @@ class GitHubApi with ChangeNotifier {
     return _userAvatarUrl;
   }
 
-  //サーキュラーインジケーターの表示・非表示を管理するフラグ
   bool _isLoading = false;
 
   bool get isLoading {
@@ -47,9 +46,9 @@ class GitHubApi with ChangeNotifier {
   }
 
   GitHubApi() {
-    scrollController.addListener(() {  // ここを修正
-      if (scrollController.position.atEdge) {  // ここを修正
-        if (scrollController.position.pixels != 0) {  // ここを修正
+    scrollController.addListener(() {  
+      if (scrollController.position.atEdge) {  
+        if (scrollController.position.pixels != 0) {  
           fetchRepositories(lastQuery);
         }
       }
@@ -71,7 +70,7 @@ class GitHubApi with ChangeNotifier {
 
 
 int _currentPage = 1;
-int _perPage = 30;  // You can set this value to anything up to 100.
+int _perPage = 30;
 
 Future<void> fetchRepositories(String query) async {
   print('fetchRepositories called with query: $query');
@@ -87,7 +86,7 @@ Future<void> fetchRepositories(String query) async {
   final response = await http.get(
     Uri.parse('https://api.github.com/search/repositories?q=$query&page=$_currentPage&per_page=$_perPage'),
     headers: <String, String>{
-      'Authorization': 'token $ACCESS_TOKEN',  // your github access token
+      'Authorization': 'token $ACCESS_TOKEN',
     },
   );
 

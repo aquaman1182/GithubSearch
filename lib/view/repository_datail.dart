@@ -1,4 +1,5 @@
 import 'package:anycloud_pre_training/di/github_api.dart';
+import 'package:anycloud_pre_training/view/components/icon_button_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,9 @@ class RepositoryDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(repository['name'].toString()),
+        actions: <Widget>[
+          UserProfileIconButton(),
+        ],
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -27,16 +31,16 @@ class RepositoryDetailPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Card(
-            color: Colors.green[100],
+            color: Colors.greenAccent[100],
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min, 
                 children: <Widget>[
-                  if (gitHubApi.userDetails['avatar_url'] != null)
+                  if (repository['owner']['avatar_url'] != null)
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: NetworkImage(gitHubApi.userDetails['avatar_url']),
+                    backgroundImage: NetworkImage(repository['owner']['avatar_url']),
                   ),
                   Text('🎌' + 'Language: ${repository['language'].toString()}'),
                   SizedBox(height: 10), // 間隔を追加
