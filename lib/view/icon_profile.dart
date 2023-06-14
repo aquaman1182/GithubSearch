@@ -1,4 +1,5 @@
 import 'package:anycloud_pre_training/di/github_api.dart';
+import 'package:anycloud_pre_training/view/components/icon_button_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,9 @@ class UserDetailsScreen extends StatelessWidget {
                   context.go("/");
                 },
               ),
+              actions: [
+                UserProfileIconButton()
+              ],
             ),
             body: Center(
               child: Padding(
