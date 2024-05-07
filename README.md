@@ -1,6 +1,4 @@
-# anycloud_pre_training
-
-A new Flutter project.
+GitHubのリポジトリ検索
 
 ## Getting Started
 
